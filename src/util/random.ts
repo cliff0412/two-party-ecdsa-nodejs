@@ -1,56 +1,80 @@
-// import BN from 'bn.js';
+// import { bitLength } from "bigint-crypto-utils"
 
+// import BN from 'bn.js';
+// const secrets = require('bigint-secrets');
+import crypto from 'crypto';
+import bigInteger, { BigInteger } from 'big-integer';
+
+export const randomPrime = async (bitLength: number): Promise<BigInteger> => {
+    console.log(bitLength)
+    return new Promise((resolve) => {
+        const DH = crypto.createDiffieHellman(bitLength);
+
+        let res = DH.getPrime("hex");
+        // crypto.randomBytes()
+        // secrets.prime(bitLength).then((res: any) => {
+        //     resolve(bigInteger(res));
+        // }).catch((err: any) => reject(err));
+
+        let bn = BigInt('0x' + res)
+        resolve(bigInteger(
+            bn
+        ))
+
+    });
+
+}
 // class Random {
 
 //     public static ZERO = new BN(0);
 //     public static MAX_ITERATIONS = 1000;
 
-//     public static createRandomInRange(min: BN, max: BN): BNN {
+    // public static createRandomInRange(min: BN, max: BN): BNN {
 
 
-//         if (min.gt(max)) {
-//             throw new Error("'min' may not be greater than 'max'")
-//         }
+    //     if (min.gt(max)) {
+    //         throw new Error("'min' may not be greater than 'max'")
+    //     }
 
-//         if (min.eq(max)) return min;
+    //     if (min.eq(max)) return min;
 
-//         if (min.bitLength() > max.bitLength() / 2) {
-//             return this.createRandomInRange(this.ZERO, max.sub(min)).add(min);
-//         }
+    //     if (min.bitLength() > max.bitLength() / 2) {
+    //         return this.createRandomInRange(this.ZERO, max.sub(min)).add(min);
+    //     }
 
-//         for (let i = 0; i < this.MAX_ITERATIONS; ++i) {
-//             BigInteger x = createRandomBigInteger(max.bitLength(), random);
-//             if (x.compareTo(min) >= 0 && x.compareTo(max) <= 0) {
-//                 return x;
-//             }
-//         }
+    //     for (let i = 0; i < this.MAX_ITERATIONS; ++i) {
+    //         BigInteger x = createRandomBigInteger(max.bitLength(), random);
+    //         if (x.compareTo(min) >= 0 && x.compareTo(max) <= 0) {
+    //             return x;
+    //         }
+    //     }
 
-//         // fall back to a faster (restricted) method
-//         return createRandomBigInteger(max.subtract(min).bitLength() - 1, random).add(min);
-//     }
+    //     // fall back to a faster (restricted) method
+    //     return createRandomBigInteger(max.subtract(min).bitLength() - 1, random).add(min);
+    // }
 
-//     public static createRandomBigInteger(bitLength: number): BN {
-//         return new BigInteger(1, createRandom(bitLength, random));
-//     }
+    // public static createRandomBigInteger(bitLength: number): BN {
+    //     return new BigInteger(1, createRandom(bitLength, random));
+    // }
 
-//     private static createRandom( bitLength: number)
-         
-//         {
-//             if (bitLength < 1) {
-//                 throw new Error("bitLength must be at least 1");
-//             }
+    // private static createRandom( bitLength: number)
 
-//             let nBytes = (bitLength + 7) / 8;
+    //     {
+    //         if (bitLength < 1) {
+    //             throw new Error("bitLength must be at least 1");
+    //         }
 
-//             byte[] rv = new byte[nBytes];
+    //         let nBytes = (bitLength + 7) / 8;
 
-//             random.nextBytes(rv);
+    //         byte[] rv = new byte[nBytes];
 
-//             // strip off any excess bits in the MSB
-//             int xBits = 8 * nBytes - bitLength;
-//             rv[0] &= (byte)(255 >>> xBits);
+    //         random.nextBytes(rv);
 
-//             return rv;
-//         }
+    //         // strip off any excess bits in the MSB
+    //         int xBits = 8 * nBytes - bitLength;
+    //         rv[0] &= (byte)(255 >>> xBits);
+
+    //         return rv;
+    //     }
 // }
 

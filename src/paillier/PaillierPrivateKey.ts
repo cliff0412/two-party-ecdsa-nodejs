@@ -1,34 +1,37 @@
-import BN from "bn.js";
-import * as bigintCryptoUtils from 'bigint-crypto-utils'
+// import BN from "bn.js";
+// import * as bigintCryptoUtils from 'bigint-crypto-utils'
+import bigInt, { BigInteger } from 'big-integer';
 
 import { CryptoException } from "../exception/CryptoException";
-import * as util from '../util/util';
+// import * as util from '../util/util';
 
 export default class PaillierPrivateKey {
 
-    private p: BN;
-    private q: BN;
-    private n: BN;
-    private pSquare: BN;
-    private qSquare: BN;
-    private nSquare: BN;
-    private lambda: BN;
-    private lambdaInv: BN;
-    private pSquareInv: BN;
-    private qSquareInv: BN;
+    private p: BigInteger;
+    private q: BigInteger;
+    private n: BigInteger;
+    private pSquare: BigInteger;
+    private qSquare: BigInteger;
+    private nSquare: BigInteger;
+    private lambda: BigInteger;
+    private lambdaInv: BigInteger;
+    private pSquareInv: BigInteger;
+    private qSquareInv: BigInteger;
 
-    public constructor(p: BN, q: BN) {
+    public constructor(p: BigInteger, q: BigInteger) {
 
         if (p == null || q == null) {
             throw new Error(CryptoException.NULL_INPUT);
         }
-        if (p.bitLength() < 1024 || q.bitLength() < 1024) {
+        if (p.bitLength().valueOf() < 1024 || q.bitLength().valueOf() < 1024) {
             throw new Error(CryptoException.BIT_LENGTH_TOO_SMALL);
         }
 
+
+
         if (
-            !bigintCryptoUtils.isProbablyPrime(util.bnToBigInt(p)) ||
-            !bigintCryptoUtils.isProbablyPrime(util.bnToBigInt(q))
+            !p.isPrime() ||
+            !q.isPrime()
         ) {
             throw new Error(CryptoException.PARAMETER_IS_NOT_PRIME);
         }
@@ -36,32 +39,30 @@ export default class PaillierPrivateKey {
             throw new Error(CryptoException.SAME_PRIMES);
         }
 
-        const ONE = new BN(1);
+        const ONE =  bigInt(1);
 
         this.p = p;
         this.q = q;
-        this.n = p.mul(q);
-        this.nSquare = this.n.mul(this.n);
-        let pMinusOne: BN = p.sub(ONE);
-        let qMinusOne: BN = q.sub(ONE);
-        let d: BN = pMinusOne.gcd(qMinusOne);
-        this.lambda = pMinusOne.mul(qMinusOne).div(d);  // lambda = lcm( p-1, q-1 )
+        this.n = p.multiply(q);
+        this.nSquare = this.n.multiply(this.n);
+        let pMinusOne: BigInteger = p.subtract(ONE);
+        let qMinusOne: BigInteger = q.subtract(ONE);
+        let d: BigInteger = bigInt.gcd(pMinusOne,qMinusOne );
+        this.lambda = pMinusOne.multiply(qMinusOne).divide(d);  // lambda = lcm( p-1, q-1 )
 
 
-        let red = BN.red(this.n);
-        let lambdaInRed = this.lambda.toRed(red);
 
-        this.lambdaInv = lambdaInRed.redInvm();
+        this.lambdaInv = this.lambda.modInv(this.n);
 
-        this.pSquare = p.mul(p);
-        this.qSquare = q.mul(q);
+        this.pSquare = p.multiply(p);
+        this.qSquare = q.multiply(q);
 
 
-        let pSquareInRed = this.pSquare.toRed(BN.red(this.qSquare));
-        this.pSquareInv = pSquareInRed.redInvm();
+        // let pSquareInRed = this.pSquare.toRed(BN.red(this.qSquare));
+        this.pSquareInv = this.pSquare.modInv(this.qSquare);
 
-        let qSquareInRed = this.qSquare.toRed(BN.red(this.pSquare));
-        this.qSquareInv = qSquareInRed.redInvm();
+        // let qSquareInRed = this.qSquare.toRed(BN.red(this.pSquare));
+        this.qSquareInv = this.qSquare.modInv(this.pSquare);
 
     }
 
