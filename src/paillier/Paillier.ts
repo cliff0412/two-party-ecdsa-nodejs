@@ -1,11 +1,8 @@
-// import BN from 'bn.js';
-// import * as bigintCryptoUtils from 'bigint-crypto-utils'
 import bigInt, { BigInteger } from 'big-integer';
 import { CryptoException } from "../exception/CryptoException";
 
 import PaillierPublicKey from './PaillierPublicKey';
 import PaillierPrivateKey from './PaillierPrivateKey';
-// import * as util from '../util/util';
 import { CryptoConsants } from '../common/CryptoConstants';
 
 export default class Paillier {
@@ -78,7 +75,7 @@ export default class Paillier {
         let N2 = N.square();
         let c = m.multiply(N).add(CryptoConsants.BN_ONE);
 
-        c = c.multiply( r.modPow(N, N2)).mod(N2);
+        c = c.multiply(r.modPow(N, N2)).mod(N2);
         // console.log("-------end----")
         return c;
     }
@@ -113,71 +110,81 @@ export default class Paillier {
         return cn.subtract(CryptoConsants.BN_ONE).divide(N).multiply(privateKey.getLambdaInv()).mod(N);
     }
 
-    // /**
-    //  * Homomorphic addition of two Paillier ciphertexts.
-    //  * @param publicKey the Paillier public key
-    //  * @param c1 the first ciphertext
-    //  * @param c2 the second ciphertext
-    //  * @return a new ciphertext encrypts the addition of the two plaintexts in the ciphertexts
-    //  */
-    // public static add(publicKey: PaillierPublicKey, c1: BN, c2: BN): BN {
-    //     if (publicKey == null || c1 == null || c2 == null) {
-    //         throw new Error(CryptoException.NULL_INPUT);
-    //     }
+    /**
+     * Homomorphic addition of two Paillier ciphertexts.
+     * @param publicKey the Paillier public key
+     * @param c1 the first ciphertext
+     * @param c2 the second ciphertext
+     * @return a new ciphertext encrypts the addition of the two plaintexts in the ciphertexts
+     */
+    public static add(publicKey: PaillierPublicKey, c1: BigInteger, c2: BigInteger): BigInteger {
+        if (publicKey == null || c1 == null || c2 == null) {
+            throw new Error(CryptoException.NULL_INPUT);
+        }
 
-    //     return c1.mul(c2).mod(publicKey.getnSquare());
-    // }
+        return c1.multiply(c2).mod(publicKey.getnSquare());
+    }
 
-    // /**
-    //  * Homomorphic subtraction of two Paillier ciphertexts.
-    //  * @param publicKey the Paillier public key
-    //  * @param c1 the first ciphertext
-    //  * @param c2 the second ciphertext
-    //  * @return a new ciphertext encrypts the subtraction of the two plaintexts in the ciphertexts
-    //  */
-    // public static subtract(publicKey: PaillierPublicKey, c1: BN, c2: BN): BN {
-    //     if (publicKey == null || c1 == null || c2 == null) {
-    //         throw new Error(CryptoException.NULL_INPUT);
-    //     }
+    /**
+     * Homomorphic subtraction of two Paillier ciphertexts.
+     * @param publicKey the Paillier public key
+     * @param c1 the first ciphertext
+     * @param c2 the second ciphertext
+     * @return a new ciphertext encrypts the subtraction of the two plaintexts in the ciphertexts
+     */
+    public static subtract(publicKey: PaillierPublicKey, c1: BigInteger, c2: BigInteger): BigInteger {
+        if (publicKey == null || c1 == null || c2 == null) {
+            throw new Error(CryptoException.NULL_INPUT);
+        }
 
-    //     let nSquareRed = BN.red(publicKey.getnSquare());
+        // let nSquareRed = BN.red(publicKey.getnSquare());
 
-    //     let t: BN = c2.toRed(nSquareRed).redInvm();
-    //     return c1.mul(t).mod(publicKey.getnSquare());
-    // }
+        // let t: BN = c2.toRed(nSquareRed).redInvm();
 
-    // /**
-    // * Homomorphic subtraction of a Paillier ciphertext and a Paillier plaintext.
-    // * @param publicKey the Paillier public key
-    // * @param c the ciphertext
-    // * @param m the plaintext
-    // * @return a new ciphertext encrypts the subtraction of the plaintext in the ciphertext and the given plaintext
-    // */
-    // public static subtractPlain(publicKey: PaillierPublicKey, c: BN, m: BN): BN {
-    //     if (publicKey == null || c == null || m == null) {
-    //         throw new Error(CryptoException.NULL_INPUT);
-    //     }
+        let t: BigInteger = c2.modInv(publicKey.getnSquare());
+        return c1.multiply(t).mod(publicKey.getnSquare());
+    }
 
-    //     let c2: BN = CryptoConsants.ONE.sub(m.mul(publicKey.getN())).umod(publicKey.getnSquare());
-    //     return c.mul(c2).umod(publicKey.getnSquare());
-    // }
+    /**
+    * Homomorphic subtraction of a Paillier ciphertext and a Paillier plaintext.
+    * @param publicKey the Paillier public key
+    * @param c the ciphertext
+    * @param m the plaintext
+    * @return a new ciphertext encrypts the subtraction of the plaintext in the ciphertext and the given plaintext
+    */
+    public static subtractPlain(publicKey: PaillierPublicKey, c: BigInteger, m: BigInteger): BigInteger {
+        if (publicKey == null || c == null || m == null) {
+            throw new Error(CryptoException.NULL_INPUT);
+        }
 
-    // /**
-    //  * Homomorphic multiplication of a ciphertext and a constant.
-    //  * @param publicKey the Paillier public key
-    //  * @param c the ciphertext
-    //  * @param k the constant
-    //  * @return a new ciphertext encrypts the plaintext in the ciphertext multiplied by the constant
-    //  */
-    // public static multiply(publicKey: PaillierPublicKey, c: BN, k: BN): BN {
-    //     if (publicKey == null || c == null || k == null) {
-    //         throw new Error(CryptoException.NULL_INPUT);
-    //     }
+        let c2: BigInteger = CryptoConsants.BN_ONE.subtract(m.multiply(publicKey.getN())).mod(publicKey.getnSquare());
 
-    //     let nSquareRed = BN.red(publicKey.getnSquare());
+        if (c2.isNegative()) {
+            c2 = c2.add(publicKey.getnSquare())
+        }
 
-    //     return c.toRed(nSquareRed).redPow(k);
-    //     // return c.modPow(k, publicKey.getnSquare());
-    // }
+        let res = c.multiply(c2).mod(publicKey.getnSquare())
+        return res.isNegative() ? res.add(publicKey.getnSquare()) : res;
+    }
+
+    /**
+     * Homomorphic multiplication of a ciphertext and a constant.
+     * @param publicKey the Paillier public key
+     * @param c the ciphertext
+     * @param k the constant
+     * @return a new ciphertext encrypts the plaintext in the ciphertext multiplied by the constant
+     */
+    public static multiply(publicKey: PaillierPublicKey, c: BigInteger, k: BigInteger): BigInteger {
+        if (publicKey == null || c == null || k == null) {
+            throw new Error(CryptoException.NULL_INPUT);
+        }
+
+        // let nSquareRed = BN.red(publicKey.getnSquare());
+
+        // return c.toRed(nSquareRed).redPow(k);
+
+        return c.modPow(k, publicKey.getnSquare())
+        // return c.modPow(k, publicKey.getnSquare());
+    }
 
 }

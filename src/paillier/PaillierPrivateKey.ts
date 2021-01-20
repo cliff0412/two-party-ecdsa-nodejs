@@ -1,9 +1,6 @@
-// import BN from "bn.js";
-// import * as bigintCryptoUtils from 'bigint-crypto-utils'
 import bigInt, { BigInteger } from 'big-integer';
 
 import { CryptoException } from "../exception/CryptoException";
-// import * as util from '../util/util';
 
 export default class PaillierPrivateKey {
 

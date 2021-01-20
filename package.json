@@ -1,6 +1,6 @@
 {
   "name": "two-party-ecdsa-nodejs",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "two party ecdsa implemented in nodejs",
   "author": "wyann008",
   "main": "dist/index.js",
