@@ -1,11 +1,10 @@
 import BN from 'bn.js';
 
-import { CryptoException } from "../exception/CryptoException";
-
 import PaillierPublicKey from './PaillierPublicKey';
 import PaillierPrivateKey from './PaillierPrivateKey';
 import * as random from '../util/random';
 import { CryptoConsants } from '../common/CryptoConstants';
+import { CryptoException } from "../exception/CryptoException";
 
 export default class Paillier {
     public static ONE = new BN("1", 10);
