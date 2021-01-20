@@ -1,5 +1,6 @@
 
-import { BigInteger } from 'big-integer';
+import  { BigInteger } from 'big-integer';
+
 import PaillierKeyPair from './PaillierKeyPair';
 import PaillierPublicKey from './PaillierPublicKey';
 import PaillierPrivateKey from './PaillierPrivateKey';
@@ -16,9 +17,15 @@ export class PaillierKeyPairGenerator {
         this.bitLength = bitLength;
     }
 
+    // public generateKeyPair1() {
+    //     const {publicKey, privateKey} = paillier.generateRandomKeys(2048);
+    // }
+
 
     public async generateKeyPair(): Promise<PaillierKeyPair> {
         // random = new SecureRandom();
+        
+        // bigInt.gcd()
 
         let p: BigInteger, q: BigInteger;
         let primeBitlength: number = Math.floor((this.bitLength + 1) / 2);

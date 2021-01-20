@@ -19,7 +19,7 @@
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/jest",
-            "args": ["test", "--runInBand", "random.test.ts"],
+            "args": ["test", "--runInBand", "random.test"],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
             "console": "integratedTerminal",

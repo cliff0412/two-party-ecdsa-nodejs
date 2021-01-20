@@ -2,24 +2,23 @@
 
 // import BN from 'bn.js';
 // const secrets = require('bigint-secrets');
-import crypto from 'crypto';
+// import crypto from 'crypto';
 import bigInteger, { BigInteger } from 'big-integer';
+const cryptoUtil = require("./bigint-crypto-utils");
+// import * as cryptoUtil from './bigint-crypto-utils';
 
 export const randomPrime = async (bitLength: number): Promise<BigInteger> => {
-    console.log(bitLength)
-    return new Promise((resolve) => {
-        const DH = crypto.createDiffieHellman(bitLength);
+    console.log("using bigLength: ",bitLength)
+    return new Promise((resolve, reject) => {
+        cryptoUtil.prime(bitLength).then( (primeNum:bigint)=> {
+            console.log(primeNum.toString())
+            resolve(bigInteger(
+                primeNum
+            ))
+        }).catch( (err: any) => {
+            reject(err)
+        })
 
-        let res = DH.getPrime("hex");
-        // crypto.randomBytes()
-        // secrets.prime(bitLength).then((res: any) => {
-        //     resolve(bigInteger(res));
-        // }).catch((err: any) => reject(err));
-
-        let bn = BigInt('0x' + res)
-        resolve(bigInteger(
-            bn
-        ))
 
     });
 
