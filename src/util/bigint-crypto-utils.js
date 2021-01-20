@@ -13,59 +13,59 @@ const {bitLength, modPow, toZn} = require("./bigint-mod-arith")
  *
  * @returns {Promise<boolean>} A promise that resolves to a boolean that is either true (a probably prime number) or false (definitely composite)
  */
-function isProbablyPrime(w, iterations = 16, disableWorkers = false) {
-  if (typeof w === 'number') {
-    w = BigInt(w)
-  }
-  if (w < 0) throw RangeError('w MUST be >= 0')
-  /* eslint-disable no-lone-blocks */
-  if (!process.browser) { // Node.js
-    /* istanbul ignore else */
-    if (!disableWorkers && _useWorkers) {
-      const { Worker } = require('worker_threads')
-      return new Promise((resolve, reject) => {
-        const worker = new Worker(__filename)
+// function isProbablyPrime(w, iterations = 16, disableWorkers = false) {
+//   if (typeof w === 'number') {
+//     w = BigInt(w)
+//   }
+//   if (w < 0) throw RangeError('w MUST be >= 0')
+//   /* eslint-disable no-lone-blocks */
+//   if (!process.browser) { // Node.js
+//     /* istanbul ignore else */
+//     if (!disableWorkers && _useWorkers) {
+//       const { Worker } = require('worker_threads')
+//       return new Promise((resolve, reject) => {
+//         const worker = new Worker(__filename)
 
-        worker.on('message', (data) => {
-          worker.terminate()
-          resolve(data.isPrime)
-        })
+//         worker.on('message', (data) => {
+//           worker.terminate()
+//           resolve(data.isPrime)
+//         })
 
-        worker.on('error', reject)
+//         worker.on('error', reject)
 
-        worker.postMessage({
-          rnd: w,
-          iterations: iterations,
-          id: 0
-        })
-      })
-    } else {
-      return new Promise((resolve) => {
-        resolve(_isProbablyPrime(w, iterations))
-      })
-    }
-  } else { // browser
-    return new Promise((resolve, reject) => {
-      const worker = new Worker(_isProbablyPrimeWorkerUrl())
+//         worker.postMessage({
+//           rnd: w,
+//           iterations: iterations,
+//           id: 0
+//         })
+//       })
+//     } else {
+//       return new Promise((resolve) => {
+//         resolve(_isProbablyPrime(w, iterations))
+//       })
+//     }
+//   } else { // browser
+//     return new Promise((resolve, reject) => {
+//       const worker = new Worker(_isProbablyPrimeWorkerUrl())
 
-      worker.onmessage = (event) => {
-        worker.terminate()
-        resolve(event.data.isPrime)
-      }
+//       worker.onmessage = (event) => {
+//         worker.terminate()
+//         resolve(event.data.isPrime)
+//       }
 
-      worker.onmessageerror = (event) => {
-        reject(event)
-      }
+//       worker.onmessageerror = (event) => {
+//         reject(event)
+//       }
 
-      worker.postMessage({
-        rnd: w,
-        iterations: iterations,
-        id: 0
-      })
-    })
-  }
-  /* eslint-enable no-lone-blocks */
-}
+//       worker.postMessage({
+//         rnd: w,
+//         iterations: iterations,
+//         id: 0
+//       })
+//     })
+//   }
+//   /* eslint-enable no-lone-blocks */
+// }
 
 /**
 * A probably-prime (Miller-Rabin), cryptographically-secure, random-number generator.
@@ -119,22 +119,22 @@ function prime(bitLength, iterations = 16) {
       }
     }
     /* eslint-disable no-lone-blocks */
-    if (process.browser) { // browser
+    // if (process.browser) { // browser
       const workerURL = _isProbablyPrimeWorkerUrl()
       for (let i = 0; i < self.navigator.hardwareConcurrency - 1; i++) {
         const newWorker = new Worker(workerURL)
         newWorker.onmessage = (event) => _onmessage(event.data, newWorker)
         workerList.push(newWorker)
       }
-    } else { // Node.js
-      const { cpus } = require('os')
-      const { Worker } = require('worker_threads')
-      for (let i = 0; i < cpus().length - 1; i++) {
-        const newWorker = new Worker(__filename)
-        newWorker.on('message', (msg) => _onmessage(msg, newWorker))
-        workerList.push(newWorker)
-      }
-    }
+    // } else { // Node.js
+    //   const { cpus } = require('os')
+    //   const { Worker } = require('worker_threads')
+    //   for (let i = 0; i < cpus().length - 1; i++) {
+    //     const newWorker = new Worker(__filename)
+    //     newWorker.on('message', (msg) => _onmessage(msg, newWorker))
+    //     workerList.push(newWorker)
+    //   }
+    // }
     /* eslint-enable no-lone-blocks */
     for (let i = 0; i < workerList.length; i++) {
       randBits(bitLength, true).then(function (buf) {
@@ -663,40 +663,40 @@ function _isProbablyPrime(w, iterations = 16) {
 
 let _useWorkers = false // The following is just to check whether we can use workers
 /* eslint-disable no-lone-blocks */
-if (!process.browser) { // Node.js
-  try {
-    require.resolve('worker_threads')
-    _useWorkers = true
-  } catch (e) {
-    /* istanbul ignore next */
-    console.log(`[bigint-crypto-utils] WARNING:
-This node version doesn't support worker_threads. You should enable them in order to greatly speedup the generation of big prime numbers.
-  · With Node >=11 it is enabled by default (consider upgrading).
-  · With Node 10, starting with 10.5.0, you can enable worker_threads at runtime executing node --experimental-worker `)
-  }
-} else { // Native JS
-  if (self.Worker) {
-    _useWorkers = true
-  } else {
-    console.log("not using workers")
-  }
-}
+// if (!process.browser) { // Node.js
+//   try {
+//     require.resolve('worker_threads')
+//     _useWorkers = true
+//   } catch (e) {
+//     /* istanbul ignore next */
+//     console.log(`[bigint-crypto-utils] WARNING:
+// This node version doesn't support worker_threads. You should enable them in order to greatly speedup the generation of big prime numbers.
+//   · With Node >=11 it is enabled by default (consider upgrading).
+//   · With Node 10, starting with 10.5.0, you can enable worker_threads at runtime executing node --experimental-worker `)
+//   }
+// } else { // Native JS
+//   if (self.Worker) {
+//     _useWorkers = true
+//   } else {
+//     console.log("not using workers")
+//   }
+// }
 /* eslint-enable no-lone-blocks */
 
-if (!process.browser && _useWorkers) { // node.js with support for workers
-  const { parentPort, isMainThread } = require('worker_threads')
-  /* istanbul ignore if */
-  if (!isMainThread) { // worker
-    parentPort.on('message', function (data) { // Let's start once we are called
-      // data = {rnd: <bigint>, iterations: <number>}
-      const isPrime = _isProbablyPrime(data.rnd, data.iterations)
-      parentPort.postMessage({
-        isPrime: isPrime,
-        value: data.rnd,
-        id: data.id
-      })
-    })
-  }
-}
+// if (!process.browser && _useWorkers) { // node.js with support for workers
+//   const { parentPort, isMainThread } = require('worker_threads')
+//   /* istanbul ignore if */
+//   if (!isMainThread) { // worker
+//     parentPort.on('message', function (data) { // Let's start once we are called
+//       // data = {rnd: <bigint>, iterations: <number>}
+//       const isPrime = _isProbablyPrime(data.rnd, data.iterations)
+//       parentPort.postMessage({
+//         isPrime: isPrime,
+//         value: data.rnd,
+//         id: data.id
+//       })
+//     })
+//   }
+// }
 
 module.exports.prime = prime;
