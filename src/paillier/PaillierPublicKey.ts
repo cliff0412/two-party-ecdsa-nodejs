@@ -1,4 +1,4 @@
-import * as BN from 'bn.js';
+import BN from 'bn.js';
 import { CryptoException } from "../exception/CryptoException";
 
 export default class PaillierPublicKey {

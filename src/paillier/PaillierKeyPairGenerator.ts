@@ -1,12 +1,11 @@
 import BN from "bn.js";
-import * as bigintCryptoUtils from 'bigint-crypto-utils'
 
 import PaillierKeyPair from './PaillierKeyPair';
 import PaillierPublicKey from './PaillierPublicKey';
 import PaillierPrivateKey from './PaillierPrivateKey';
 
 import { CryptoConsants } from '../common/CryptoConstants';
-import * as util from '../util/util';
+import * as random from '../util/random';
 
 
 export class PaillierKeyPairGenerator {
@@ -29,23 +28,23 @@ export class PaillierKeyPairGenerator {
 
         if ((this.bitLength & 1) == 0) {     // bitLength is odd number
 
-            p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            p = await random.randomPrime(primeBitlength);
 
             while (p.mul(p).lt(squaredLowBound)) {
-                p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+                p = await random.randomPrime(primeBitlength);
             }
-            q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            q = await random.randomPrime(primeBitlength);
             while (q.mul(q).lt(squaredLowBound) || q.eq(p)) {
-                q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+                q = await random.randomPrime(primeBitlength);
             }
         } else {                        // bigLength is even number
-            p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            p = await random.randomPrime(primeBitlength);
             while (p.mul(p).gte(squaredUpBound)) {
-                p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+                p = await random.randomPrime(primeBitlength);
             }
-            q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            q = await random.randomPrime(primeBitlength);
             while (q.mul(q).gte(squaredUpBound) || q.eq(p)) {
-                q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+                q = await random.randomPrime(primeBitlength);
             }
         }
 

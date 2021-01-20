@@ -1,5 +1,4 @@
 import BN from "bn.js";
-import * as bigintCryptoUtils from 'bigint-crypto-utils'
 
 import { CryptoException } from "../exception/CryptoException";
 import * as util from '../util/util';
@@ -27,8 +26,9 @@ export default class PaillierPrivateKey {
         }
 
         if (
-            !bigintCryptoUtils.isProbablyPrime(util.bnToBigInt(p)) ||
-            !bigintCryptoUtils.isProbablyPrime(util.bnToBigInt(q))
+
+            !util.isProbablyPrime(p) ||
+            !util.isProbablyPrime(q)
         ) {
             throw new Error(CryptoException.PARAMETER_IS_NOT_PRIME);
         }

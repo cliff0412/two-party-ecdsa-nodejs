@@ -1,11 +1,10 @@
 import BN from 'bn.js';
-import * as bigintCryptoUtils from 'bigint-crypto-utils'
 
 import { CryptoException } from "../exception/CryptoException";
 
 import PaillierPublicKey from './PaillierPublicKey';
 import PaillierPrivateKey from './PaillierPrivateKey';
-import * as util from '../util/util';
+import * as random from '../util/random';
 import { CryptoConsants } from '../common/CryptoConstants';
 
 export default class Paillier {
@@ -22,15 +21,11 @@ export default class Paillier {
             throw new Error(CryptoException.NULL_INPUT);
         }
 
-
-
-        let r: bigint;
         let rInBN: BN;
         do {
-            r = bigintCryptoUtils.randBetween(
-                util.bnToBigInt(publicKey.getN().sub(this.ONE)),
-                util.bnToBigInt(this.ONE));
-            rInBN = util.bigIntToBN(r);
+            rInBN = random.randBetween(
+                this.ONE, 
+                publicKey.getN().sub(this.ONE));
         } while (
             // bigintCryptoUtils.gcd(r, ) != 1n
             !rInBN.gcd(publicKey.getN()).eq(this.ONE)
