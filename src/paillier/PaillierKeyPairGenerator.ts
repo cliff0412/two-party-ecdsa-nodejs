@@ -1,5 +1,5 @@
 
-import  { BigInteger } from 'big-integer';
+import { BigInteger } from 'big-integer';
 
 import PaillierKeyPair from './PaillierKeyPair';
 import PaillierPublicKey from './PaillierPublicKey';
@@ -23,9 +23,7 @@ export class PaillierKeyPairGenerator {
 
 
     public async generateKeyPair(): Promise<PaillierKeyPair> {
-        // random = new SecureRandom();
-        
-        // bigInt.gcd()
+        let startTime = new Date().getTime();
 
         let p: BigInteger, q: BigInteger;
         let primeBitlength: number = Math.floor((this.bitLength + 1) / 2);
@@ -35,7 +33,7 @@ export class PaillierKeyPairGenerator {
 
         if ((this.bitLength & 1) == 0) {     // bitLength is odd number
 
-            p =await random.randomPrime(primeBitlength);
+            p = await random.randomPrime(primeBitlength);
 
             while (p.multiply(p).lt(squaredLowBound)) {
                 p = await random.randomPrime(primeBitlength);
@@ -59,7 +57,8 @@ export class PaillierKeyPairGenerator {
 
         let publicKey: PaillierPublicKey = new PaillierPublicKey(n);
         let privateKey: PaillierPrivateKey = new PaillierPrivateKey(p, q);
-
+        let endTime = new Date().getTime();
+        console.log(`total time in generating keypair ${(endTime - startTime)/1000} seconds`)
         return new PaillierKeyPair(publicKey, privateKey);
     }
 }

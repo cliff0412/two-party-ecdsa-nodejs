@@ -1,3 +1,5 @@
+const {bitLength, modPow, toZn} = require("./bigint-mod-arith")
+
 
 /**
  * The test first tries if any of the first 250 small primes are a factor of the input number and then passes several
