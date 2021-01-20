@@ -1,9 +1,6 @@
 import '@babel/polyfill';
 import PaillierKeyPairGenerator from './PaillierKeyPairGenerator';
 import PaillierKeyPair from './PaillierKeyPair';
-import * as bigintCryptoUtils from 'bigint-crypto-utils'
-// import * as bigintCryptoUtils from 'bigint-crypto-utils/lib/index.browser.bundle.mod'
-import * as util from '../util/util';
 
 
 test('generateKeyPair', async () => {
@@ -13,7 +10,6 @@ test('generateKeyPair', async () => {
     let keyPair: PaillierKeyPair= await  paillierKeyPairGenerator.generateKeyPair();
     // console.log(keyPair.getPrivateKey().getP().toString());
     
-    expect(bigintCryptoUtils.isProbablyPrime(util.bnToBigInt(keyPair.getPrivateKey().getP()))).toBeTruthy();
-    expect(bigintCryptoUtils.isProbablyPrime(util.bnToBigInt(keyPair.getPrivateKey().getQ()))).toBeTruthy();
-
+    expect(keyPair.getPrivateKey().getP().isPrime()).toBeTruthy();
+    expect(keyPair.getPrivateKey().getQ().isPrime()).toBeTruthy();
 })

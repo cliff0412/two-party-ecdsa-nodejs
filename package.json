@@ -1,15 +1,15 @@
 {
   "name": "two-party-ecdsa-nodejs",
-  "version": "1.0.1",
+  "version": "1.0.11",
   "description": "two party ecdsa implemented in nodejs",
   "author": "wyann008",
   "main": "dist/index.js",
-	"types": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "compile": "tsc src/paillier/Paillier.ts",
     "prebuild": "rimraf dist",
-		"build": "tsc --declarationDir dist -d --emitDeclarationOnly --allowJs false && tsc"
+    "build": "tsc --declarationDir dist -d --emitDeclarationOnly --allowJs false && tsc"
   },
   "repository": {
     "type": "git",
@@ -52,11 +52,6 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "@types/bn.js": "^5.1.0",
-    "big-integer": "^1.6.48",
-    "bigint-crypto-utils": "^3.0.9",
-    "bn.js": "^5.1.3",
-    "crypto": "^1.0.1",
-    "paillier-bigint": "^3.1.2"
+    "big-integer": "^1.6.48"
   }
 }

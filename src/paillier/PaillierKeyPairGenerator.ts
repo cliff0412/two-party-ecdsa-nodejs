@@ -1,12 +1,12 @@
-import BN from "bn.js";
-import * as bigintCryptoUtils from 'bigint-crypto-utils'
+
+import { BigInteger } from 'big-integer';
 
 import PaillierKeyPair from './PaillierKeyPair';
 import PaillierPublicKey from './PaillierPublicKey';
 import PaillierPrivateKey from './PaillierPrivateKey';
 
 import { CryptoConsants } from '../common/CryptoConstants';
-import * as util from '../util/util';
+import * as random from '../util/random';
 
 
 export class PaillierKeyPairGenerator {
@@ -17,43 +17,48 @@ export class PaillierKeyPairGenerator {
         this.bitLength = bitLength;
     }
 
+    // public generateKeyPair1() {
+    //     const {publicKey, privateKey} = paillier.generateRandomKeys(2048);
+    // }
+
 
     public async generateKeyPair(): Promise<PaillierKeyPair> {
-        // random = new SecureRandom();
+        let startTime = new Date().getTime();
 
-        let p: BN, q: BN;
-        let primeBitlength: number = (this.bitLength + 1) / 2;
+        let p: BigInteger, q: BigInteger;
+        let primeBitlength: number = Math.floor((this.bitLength + 1) / 2);
 
-        let squaredLowBound: BN = CryptoConsants.ONE.shln(this.bitLength - 1);
-        let squaredUpBound: BN = CryptoConsants.ONE.shln(this.bitLength);
+        let squaredLowBound: BigInteger = CryptoConsants.BN_ONE.shiftLeft(this.bitLength - 1);
+        let squaredUpBound: BigInteger = CryptoConsants.BN_ONE.shiftLeft(this.bitLength);
 
         if ((this.bitLength & 1) == 0) {     // bitLength is odd number
 
-            p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            p = await random.randomPrime(primeBitlength);
 
-            while (p.mul(p).lt(squaredLowBound)) {
-                p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            while (p.multiply(p).lt(squaredLowBound)) {
+                p = await random.randomPrime(primeBitlength);
             }
-            q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
-            while (q.mul(q).lt(squaredLowBound) || q.eq(p)) {
-                q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            q = await random.randomPrime(primeBitlength);
+            while (q.multiply(q).lt(squaredLowBound) || q.eq(p)) {
+                q = await random.randomPrime(primeBitlength);
             }
         } else {                        // bigLength is even number
-            p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
-            while (p.mul(p).gte(squaredUpBound)) {
-                p = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            p = await random.randomPrime(primeBitlength);
+            while (p.multiply(p).greaterOrEquals(squaredUpBound)) {
+                p = await random.randomPrime(primeBitlength);
             }
-            q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
-            while (q.mul(q).gte(squaredUpBound) || q.eq(p)) {
-                q = util.bigIntToBN(await bigintCryptoUtils.prime(primeBitlength));
+            q = await random.randomPrime(primeBitlength);
+            while (q.multiply(q).greaterOrEquals(squaredUpBound) || q.eq(p)) {
+                q = await random.randomPrime(primeBitlength);
             }
         }
 
-        let n: BN = p.mul(q);
+        let n: BigInteger = p.multiply(q);
 
         let publicKey: PaillierPublicKey = new PaillierPublicKey(n);
         let privateKey: PaillierPrivateKey = new PaillierPrivateKey(p, q);
-
+        let endTime = new Date().getTime();
+        console.log(`total time in generating keypair ${(endTime - startTime)/1000} seconds`)
         return new PaillierKeyPair(publicKey, privateKey);
     }
 }
