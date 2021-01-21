@@ -2,7 +2,7 @@ import BN from 'bn.js';
 
 export interface ECPoint {
     // curve: base;
-    type: string;
+    type: string;    // affine
     // precomputed: PrecomputedValues | null;
 
     // constructor(curve: base, type: string);
