@@ -5,3 +5,4 @@
 ### TODO
 
 * verifyPaillierPublicKeyProof test failed
+* verifyPaillierAndDlogProof to be added

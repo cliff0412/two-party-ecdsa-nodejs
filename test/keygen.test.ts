@@ -10,7 +10,8 @@ import {
     KeyGenContextP2,
     ProofUtils,
     ECPoint,
-    ECDlogProof
+    ECDlogProof,
+    // HashCommitter,
 } from '../src'
 
 
@@ -41,4 +42,16 @@ test('keygen', () => {
     expect(!x1.isNeg() && x1.lte(upperBound)).toBeTruthy()
 
     let Q1ECDlogProof: ECDlogProof = ProofUtils.generateECDlogProof(Q1, x1);
+
+    // P1 process first message, sends p1Commitment
+    // let p1Commitment = HashCommitter.commit(
+    //     Q1.getEncoded(true),
+    //     Q1ECDlogProof.getQ().getEncoded(true),
+    //     Q1ECDlogProof.getX().getEncoded(true),
+    //     Q1ECDlogProof.getZ().toByteArray()
+    // );
+
+    // keyGenContextP1.setEcdsaPrivateKeyShare(x1);
+    // keyGenContextP1.setEcdsaPublicKeyShare(Q1);
+    // keyGenContextP1.setQ1ECDlogProof(Q1ECDlogProof);
 })

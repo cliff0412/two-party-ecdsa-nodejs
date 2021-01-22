@@ -5,17 +5,18 @@ import crypto from 'crypto';
 
 export class HashCommitter {
 
-
-    public static commit(...messageInHexStr: string[]): Commitment {
-        if (messageInHexStr == null) {
-            throw new Error(CryptoException.NULL_INPUT);
-        }
+    public static getRandomBytes(): Buffer {
         // for security parameter k, the hash function output length is 2*k;
         // the random opening value is of length 3*k
         // byte[] r = new byte[BYTE_LENGTH / 2 * 3];
         // random.nextBytes(r);
+        return crypto.randomBytes(48)
+    }
 
-        let r: Buffer = crypto.randomBytes(48)
+    public static commit(r: Buffer, ...messageInHexStr: string[]): Commitment {
+        if (messageInHexStr == null) {
+            throw new Error(CryptoException.NULL_INPUT);
+        }
 
         let md = crypto.createHash('sha256')
 
@@ -24,7 +25,7 @@ export class HashCommitter {
             if (msg == null) {
                 throw new Error(CryptoException.NULL_INPUT);
             }
-            md.update(r);
+            md.update(msg, "hex");
         }
         md.update(r);
 
