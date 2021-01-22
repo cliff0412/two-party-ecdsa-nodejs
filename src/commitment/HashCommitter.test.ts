@@ -31,7 +31,7 @@ test('commit', () => {
 
 })
 
-test.only('verify', () => {
+test('verify', () => {
     let commit = HashCommitter.commit(
         HashCommitter.getRandomBytes(),
         ...msg

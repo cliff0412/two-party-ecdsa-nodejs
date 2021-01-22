@@ -25,7 +25,8 @@
   "homepage": "https://github.com/WYANG008/two-party-ecdsa-nodejs#readme",
   "jest": {
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>/src",
+      "<rootDir>/test"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

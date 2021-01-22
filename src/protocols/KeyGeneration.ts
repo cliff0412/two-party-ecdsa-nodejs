@@ -48,7 +48,7 @@ export class KeyGeneration {
             throw new Error(CryptoException.NULL_INPUT);
         }
 
-        let upperBound: BN = this.ec.g.getN().divide(new BN(3))
+        let upperBound: BN = (this.ec.n as BN).div(new BN(3))
         if (ecdsaPrivateKeyShare.lt(CryptoConsants.ONE) ||
             ecdsaPrivateKeyShare.gt(upperBound)) {
             throw new Error(CryptoException.PARAMETER_OUT_OF_RANGE);

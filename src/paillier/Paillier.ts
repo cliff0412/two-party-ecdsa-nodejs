@@ -6,7 +6,7 @@ import * as random from '../util/random';
 import { CryptoConsants } from '../common/CryptoConstants';
 import { CryptoException } from "../exception/CryptoException";
 
-export default class Paillier {
+export class Paillier {
     public static ONE = new BN("1", 10);
 
     /**

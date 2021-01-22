@@ -2,10 +2,10 @@ import BN from 'bn.js';
 import { CryptoException } from "../exception/CryptoException";
 
 export class PaillierPublicKey {
-    private   n: BN;
-    private   nSquare: BN;
+    private n: BN;
+    private nSquare: BN;
 
-    public constructor( n: BN)  {
+    public constructor(n: BN) {
         if (n == null) {
             throw new Error(CryptoException.NULL_INPUT);
         }
@@ -20,11 +20,11 @@ export class PaillierPublicKey {
         this.nSquare = n.mul(n);
     }
 
-    public  getN(): BN {
+    public getN(): BN {
         return this.n;
     }
 
-    public  getnSquare(): BN {
+    public getnSquare(): BN {
         return this.nSquare;
     }
 

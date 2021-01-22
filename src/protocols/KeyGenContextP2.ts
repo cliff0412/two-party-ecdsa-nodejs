@@ -14,7 +14,7 @@ export class KeyGenContextP2 {
     public constructor() { }
 
     public getEcdsaPrivateKeyShare() {
-        return this.ecdsaPrivateKeyShare;
+        return this.ecdsaPrivateKeyShare as BN;
     }
 
     public setEcdsaPrivateKeyShare(ecdsaPrivateKeyShare: BN) {

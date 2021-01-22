@@ -2,7 +2,7 @@ import '@babel/polyfill';
 
 import BN from 'bn.js';
 import {PaillierPublicKey} from './PaillierPublicKey';
-import Paillier from './Paillier';
+import {Paillier} from './Paillier';
 import PaillierKeyPairGenerator from './PaillierKeyPairGenerator';
 import {PaillierKeyPair} from './PaillierKeyPair';
 
