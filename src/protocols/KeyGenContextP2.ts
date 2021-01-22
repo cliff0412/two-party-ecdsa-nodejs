@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import Commitment from '../commitment/Commitment';
+import {Commitment} from '../commitment/Commitment';
 
 export class KeyGenContextP2 {
     /**

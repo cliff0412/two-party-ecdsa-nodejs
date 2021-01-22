@@ -1,7 +1,7 @@
 import BN from 'bn.js';
 
-import PaillierPublicKey from './PaillierPublicKey';
-import PaillierPrivateKey from './PaillierPrivateKey';
+import {PaillierPublicKey} from './PaillierPublicKey';
+import {PaillierPrivateKey} from './PaillierPrivateKey';
 import * as random from '../util/random';
 import { CryptoConsants } from '../common/CryptoConstants';
 import { CryptoException } from "../exception/CryptoException";

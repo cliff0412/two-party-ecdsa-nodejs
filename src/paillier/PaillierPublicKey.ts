@@ -1,7 +1,7 @@
 import BN from 'bn.js';
 import { CryptoException } from "../exception/CryptoException";
 
-export default class PaillierPublicKey {
+export class PaillierPublicKey {
     private   n: BN;
     private   nSquare: BN;
 

@@ -1,9 +1,9 @@
-import PaillierPublicKey from './PaillierPublicKey';
-import PaillierPrivateKey from './PaillierPrivateKey';
+import {PaillierPublicKey} from './PaillierPublicKey';
+import {PaillierPrivateKey} from './PaillierPrivateKey';
 
 import { CryptoException } from "../exception/CryptoException";
 
-export default class PaillierKeyPair {
+export class PaillierKeyPair {
     private   publicKey: PaillierPublicKey;
     private   privateKey: PaillierPrivateKey;
 

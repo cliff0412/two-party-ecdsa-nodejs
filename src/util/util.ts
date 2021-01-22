@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import { ECPoint } from '../type/ECPoint';
 
 const cryptoUtil = require("./bigint-crypto-utils");
 
@@ -18,5 +19,9 @@ export const isProbablyPrime = (input: BN): Promise<boolean> => {
             .catch((err: any) => reject(err))
     });
 
+}
+
+export const encodeCompressECpointToHexStr = (point: ECPoint): string => {
+    return point.encodeCompressed('hex');
 }
 

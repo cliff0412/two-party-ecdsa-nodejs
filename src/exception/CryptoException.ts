@@ -37,4 +37,9 @@ export class CryptoException {
     public static PARAMETER_IS_NOT_PRIME: string = "parameter is not prime";
     public static SAME_PRIMES: string = "the primes are the same";
     public static INVALID_RANDOMNESS: string = "invalid randomness";
+
+     /**
+     * BN
+     */
+    public static RED_POW_ERROR: string = "redPow error";
 }

@@ -1,4 +1,4 @@
-export default class Commitment {
+export class Commitment {
 
     private commitment: Buffer;
     private openingValue: Buffer;

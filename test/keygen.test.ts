@@ -8,7 +8,9 @@ import {
     KeyGeneration,
     KeyGenContextP1,
     KeyGenContextP2,
-    ECPoint
+    ProofUtils,
+    ECPoint,
+    ECDlogProof
 } from '../src'
 
 
@@ -38,5 +40,5 @@ test('keygen', () => {
     let upperBound = ec.n.div(new BN(3));
     expect(!x1.isNeg() && x1.lte(upperBound)).toBeTruthy()
 
-    // ECDlogProof Q1ECDlogProof = ProofUtils.generateECDlogProof(G, Q1, x1);
+    let Q1ECDlogProof: ECDlogProof = ProofUtils.generateECDlogProof(Q1, x1);
 })

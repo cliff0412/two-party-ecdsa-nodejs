@@ -5,7 +5,7 @@ import { ECPoint } from '../type/ECPoint';
 import * as random from "../util/random";
 import { CryptoConsants } from '../common/CryptoConstants'
 import { CryptoException } from "../exception/CryptoException";
-import PaillierKeyPair from '../paillier/PaillierKeyPair';
+import {PaillierKeyPair} from '../paillier/PaillierKeyPair';
 import PaillierKeyPairGenerator from '../paillier/PaillierKeyPairGenerator';
 
 

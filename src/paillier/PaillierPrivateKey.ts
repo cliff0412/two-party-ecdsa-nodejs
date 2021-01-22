@@ -3,7 +3,7 @@ import BN from "bn.js";
 import { CryptoException } from "../exception/CryptoException";
 import * as util from '../util/util';
 
-export default class PaillierPrivateKey {
+export class PaillierPrivateKey {
 
     private p: BN;
     private q: BN;

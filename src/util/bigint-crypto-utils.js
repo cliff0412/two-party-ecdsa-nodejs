@@ -24,29 +24,29 @@ function isProbablyPrime(w, iterations = 16, disableWorkers = false) {
   /* eslint-disable no-lone-blocks */
   if (!process.browser) { // Node.js
     /* istanbul ignore else */
-    if (!disableWorkers && _useWorkers) {
-      const { Worker } = require('worker_threads')
-      return new Promise((resolve, reject) => {
-        const worker = new Worker(__filename)
+    // if (!disableWorkers && _useWorkers) {
+    //   const { Worker } = require('worker_threads')
+    //   return new Promise((resolve, reject) => {
+    //     const worker = new Worker(__filename)
 
-        worker.on('message', (data) => {
-          worker.terminate()
-          resolve(data.isPrime)
-        })
+    //     worker.on('message', (data) => {
+    //       worker.terminate()
+    //       resolve(data.isPrime)
+    //     })
 
-        worker.on('error', reject)
+    //     worker.on('error', reject)
 
-        worker.postMessage({
-          rnd: w,
-          iterations: iterations,
-          id: 0
-        })
-      })
-    } else {
+    //     worker.postMessage({
+    //       rnd: w,
+    //       iterations: iterations,
+    //       id: 0
+    //     })
+    //   })
+    // } else {
       return new Promise((resolve) => {
         resolve(_isProbablyPrime(w, iterations))
       })
-    }
+    // }
   } else { // browser
     return new Promise((resolve, reject) => {
       const worker = new Worker(_isProbablyPrimeWorkerUrl())

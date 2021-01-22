@@ -1,4 +1,7 @@
-use bn.js and bigint-crypto-utils
+### used packages in source
 
-### related packages
-- bigint-crypto-utils
+* bigint-crypto-utils
+
+### TODO
+
+* verifyPaillierPublicKeyProof test failed

@@ -1,6 +1,6 @@
 import '@babel/polyfill';
 import PaillierKeyPairGenerator from './PaillierKeyPairGenerator';
-import PaillierKeyPair from './PaillierKeyPair';
+import {PaillierKeyPair} from './PaillierKeyPair';
 // import * as bigintCryptoUtils from 'bigint-crypto-utils'
 // import * as bigintCryptoUtils from 'bigint-crypto-utils/lib/index.browser.bundle.mod'
 import * as util from '../util/util';
