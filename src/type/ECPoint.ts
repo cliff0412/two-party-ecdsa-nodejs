@@ -24,3 +24,8 @@ export interface ECPoint {
     eq(p: ECPoint): boolean;
     neg(): ECPoint;
 }
+
+export interface Signature {
+    r: BN;
+    s: BN;
+}

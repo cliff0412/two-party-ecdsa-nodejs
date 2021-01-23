@@ -37,7 +37,7 @@ beforeAll(() => {
 });
 
 
-test('keygen', async () => {
+const keyGen = async () => {
     let p1KeyGen: KeyGeneration = new KeyGeneration("p1");
 
     let keyGenContextP1: KeyGenContextP1 = new KeyGenContextP1();
@@ -151,5 +151,13 @@ test('keygen', async () => {
     // console.log('---p1Q--- y: ', p1Q.getY().toString("hex"))
     // console.log('---p2Q--- y: ', p2Q.getY().toString("hex"))
     expect(p1Q.getY().toString("hex")).toEqual(p2Q.getY().toString("hex"))
+}
+
+test('keygen', async () => {
+    await keyGen();
+})
+
+
+test('signing', async () => {
 
 })

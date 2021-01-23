@@ -19,7 +19,7 @@
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/jest",
-            "args": ["test", "--runInBand", "Paillier.test.ts"],
+            "args": ["test", "--runInBand", "ellipticUtil.test.ts"],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
             "console": "integratedTerminal",
