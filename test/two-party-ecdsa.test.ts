@@ -13,6 +13,8 @@ import {
     SigningContextP2,
     Paillier,
     PaillierPublicKey,
+    SigningP1,
+    SigningP2,
     util,
     random
 } from '../src'
@@ -153,11 +155,83 @@ const keyGen = async () => {
     expect(p1Q.getY().toString("hex")).toEqual(p2Q.getY().toString("hex"))
 }
 
-test('keygen', async () => {
-    await keyGen();
-})
+// test('keygen', async () => {
+//     await keyGen();
+// })
 
 
 test('signing', async () => {
+    await keyGen();
 
+
+    let p1Sign = new SigningP1(signingContextP1);
+    let p2Sign = new SigningP2(signingContextP2);
+
+    // hash of message to be signed
+    let z = random.randBetween(CryptoConsants.ONE, CryptoConsants.SECP256_CURVE_N.sub(CryptoConsants.ONE))
+    //  System.out.println(String.format("msg : %s", z.toString(16)));
+    console.log(`---msg---: ${z.toString("hex")}`)
+
+    // P1 process first message, sends p1Commitment
+    let k1 = p1Sign.generatePrivateRandomShare();
+    let R1 = p1Sign.computePublicRandomShare(k1);
+
+    let R1ECDlogProof = ProofUtils.generateECDlogProof(R1, k1);
+    let p1Commitment = HashCommitter.commit(
+        Buffer.from(util.encodeCompressECpointToHexStr(R1), "hex"),
+        util.encodeCompressECpointToHexStr(R1ECDlogProof.getQ()),
+        util.encodeCompressECpointToHexStr(R1ECDlogProof.getX()),
+        R1ECDlogProof.getZ().toString("hex")
+    );
+
+    signingContextP1.setEcdsaPrivateRandomShare(k1);
+    signingContextP1.setEcdsaPublicRandomShare(R1);
+    signingContextP1.setR1ECDlogProof(R1ECDlogProof);
+
+    // P2 process first message, receives p1Commitment, sends R2, R2ECDlogProof
+    let k2 = p2Sign.generatePrivateRandomShare();
+    let R2 = p2Sign.computePublicRandomShare(k2);
+
+    let R2ECDlogProof = ProofUtils.generateECDlogProof(R2, k2);
+
+
+    signingContextP2.setP1Commitment(p1Commitment);
+    signingContextP2.setEcdsaPrivateRandomShare(k2);
+
+
+    // P1 process secodns message, receives R2, R2ECDlogProof, sends R1, R1ECDlogProof
+
+    if (!ProofUtils.verifyECDlogProof(R2ECDlogProof)) {
+        throw new Error(CryptoException.VERIFY_PROOF_FAILED);
+    }
+    signingContextP1.setP2EcdsaPublicRandomShare(R2ECDlogProof.getQ());
+
+    // P2 processes second message, receives R1, R1ECDlogProof, sends c3.
+    if (!HashCommitter.verify(signingContextP2.getP1Commitment(),
+        util.encodeCompressECpointToHexStr(R1ECDlogProof.getQ()),
+        util.encodeCompressECpointToHexStr(R1ECDlogProof.getX()),
+        R1ECDlogProof.getZ().toString("hex")
+    )) {
+        throw new Error(CryptoException.VERIFY_COMMITMENT_FAILED);
+
+    }
+
+
+    if (!ProofUtils.verifyECDlogProof(R1ECDlogProof)) {
+        throw new Error(CryptoException.VERIFY_PROOF_FAILED);
+    }
+
+    let R = p2Sign.computePublicRandom(signingContextP2.getEcdsaPrivateRandomShare(), R1ECDlogProof.getQ());
+    let r = new BN(R.getX().toString("hex"), "hex").mod(CryptoConsants.SECP256_CURVE_N);
+    let c3 = p2Sign.computeC3(z, r, signingContextP2.getEcdsaPrivateRandomShare());
+
+
+    // P1 generates signature
+    let sig = p1Sign.computeSignature(z, signingContextP1.getP2EcdsaPublicRandomShare(), c3, signingContextP1.getEcdsaPrivateRandomShare());
+
+    expect(sig.length).toBe(2)
+    expect(r.eq(sig[0]))
+
+    // console.log(`---sig r: ${sig[0].toString("hex")}`)
+    // console.log(`---sig s: ${sig[1].toString("hex")}`)
 })
