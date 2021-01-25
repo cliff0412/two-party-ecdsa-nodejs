@@ -32,3 +32,12 @@ test('verifySig true', () => {
 
     expect(res).toBeFalsy()
 })
+
+test('privateKeyToAccount', () => {
+    let addr = ellipticUtil.privateKeyToAccountAddress("16ea9a15dd4381a2ea9c41531fee530e6a78dadc1a86d3e64f207c35f4be1d17")
+    expect(addr).toBe("0x00D8d0660b243452fC2f996A892D3083A903576F")
+
+
+    let addr2 = ellipticUtil.privateKeyToAccountAddress("e2b253cee5a710074c1a93588deed9c51d470ac894a78e793502d392c689c7b7")
+    console.log("address is: ", addr2)
+})

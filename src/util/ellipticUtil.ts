@@ -1,7 +1,9 @@
 import BN from 'bn.js';
 import elliptic from 'elliptic';
+const { keccak256, keccak256s } = require('eth-lib/lib/hash');
+
 var minUtils = require('minimalistic-crypto-utils');
-import { Signature } from '../type'
+import { Signature, ECPoint } from '../type'
 
 let EC = elliptic.ec;
 var ec = new EC('secp256k1');
@@ -10,7 +12,51 @@ export const verifySig = (msg: BN, r: BN, s: BN, pubKey: Buffer) => {
 
     let sig = toDER({ r, s })
     // console.log("sig", sig)
-    return ec.verify(msg, sig , pubKey)
+    return ec.verify(msg, sig, pubKey)
+}
+
+export const ecPointToAccountAddress = (point: ECPoint): string => {
+
+    let publicKey = "0x" + point.encode("hex", false).slice(2)
+    let publicHash = keccak256(publicKey);
+    var address = toChecksum("0x" + publicHash.slice(-40));
+    return address;
+}
+
+/**
+ * privateKeyToAccount
+ * @param privateKey no leading '0x'
+ */
+export const privateKeyToAccountAddress = (privateKey: string) => {
+    var priv = new BN(privateKey, "hex");
+    priv = priv.umod(ec.curve.n)
+
+    let pub = ec.g.mul(priv);
+    return ecPointToAccountAddress(pub)
+}
+
+/**
+ * calcunate final v value from signature recovery
+ * @param recovery a value between 0-4
+ * @param chainId kovan: 42, mainnet: 1
+ */
+export const formSigVval = (recovery: number, chainId: number) => {
+    let v = recovery + 27
+
+    // if _implementsEIP155
+    v += chainId * 2 + 8;
+    return v;
+
+}
+
+const toChecksum = (address: string) => {
+    const addressHash = keccak256s(address.slice(2));
+    let checksumAddress = "0x";
+    for (let i = 0; i < 40; i++)
+        checksumAddress += parseInt(addressHash[i + 2], 16) > 7
+            ? address[i + 2].toUpperCase()
+            : address[i + 2];
+    return checksumAddress;
 }
 
 

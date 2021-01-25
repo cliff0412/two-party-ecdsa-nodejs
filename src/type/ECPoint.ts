@@ -28,4 +28,52 @@ export interface ECPoint {
 export interface Signature {
     r: BN;
     s: BN;
+    recovery?: number;
+}
+
+export interface SignatureOnChain {
+    r: BN;
+    s: BN;
+    v: number;
+}
+
+
+interface P1KeyGenContext {
+
+    paillierPrivateKey: {
+        p: BN;
+        q: BN;
+    },
+    ecdsaPrivateKeyShare: BN;
+}
+
+interface P2KeyGenContext {
+    paillierPublicKey: {
+        N: BN;
+    };
+    cKey: BN;
+    ecdsaPrivateKeyShare: BN;
+}
+
+export interface KeyGenContext {
+    p1: P1KeyGenContext;
+    p2: P2KeyGenContext;
+    x: BN;
+    Q: ECPoint;
+}
+
+export interface KeyGenContextVO {
+    addressFromPoint: string;
+    addressFromX: string;
+    x: string;
+    p1: {
+        x1: string;
+        paillierPrivateKeyP: string;
+        paillierPrivateKeyQ: string
+    },
+    p2: {
+        paillierPublicKeyN: string;
+        cKey: string;
+        x2: string;
+    }
 }

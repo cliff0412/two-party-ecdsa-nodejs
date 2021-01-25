@@ -1,7 +1,8 @@
+import crypto from 'crypto';
+
 import { Commitment } from './Commitment';
 import { CryptoException } from '../exception/CryptoException';
 
-import crypto from 'crypto';
 
 export class HashCommitter {
 

@@ -16,4 +16,7 @@ export class CryptoConsants {
 
     public static SECP256_CURVE_N: BN = ec.n as BN;
     public static SECP256_CURVE_G: ECPoint = ec.g;
+
+    public static CHAIN_NETWORK_ID_MAIN: number = 1;
+    public static CHAIN_NETWORK_ID_KOVAN: number = 42;
 }

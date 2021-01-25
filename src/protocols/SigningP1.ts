@@ -5,7 +5,7 @@ import { SigningContextP1 } from './SigningContextP1';
 import { CryptoConsants } from '../common/CryptoConstants'
 import { CryptoException } from "../exception/CryptoException";
 import { random, ellipticUtil } from '../util'
-import { ECPoint } from '../type'
+import { ECPoint, Signature } from '../type'
 
 
 export class SigningP1 {
@@ -44,7 +44,7 @@ export class SigningP1 {
     }
 
     public computeSignature(z: BN, p2PublicRandomShare: ECPoint, c3: BN,
-        privateRandomShare: BN): BN[] {
+        privateRandomShare: BN): Signature {
         if (z == null || p2PublicRandomShare == null || c3 == null) {
             throw new Error(CryptoException.NULL_INPUT);
         }
@@ -65,13 +65,20 @@ export class SigningP1 {
             s = n.sub(s);
         }
 
+        var recoveryParam = (R.getY().isOdd() ? 1 : 0) |
+        (R.getX().cmp(r) !== 0 ? 2 : 0);
+
         if (ellipticUtil.verifySig(
             z,
             r,
             s,
             Buffer.from(this.ecdsaPublicKey.encodeCompressed("hex"), "hex")
         )) {
-            return [r, s];
+            return {
+                r: r,
+                s: s,
+                recovery: recoveryParam
+            }
         } else {
             throw new Error(CryptoException.VERIFY_SIGNATURE_FAILED);
         }

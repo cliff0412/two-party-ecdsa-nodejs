@@ -4,6 +4,7 @@ export *  from './protocols';
 export * from './proof';
 export * from './commitment';
 export * from './paillier';
+// export * from './chain/chain';
 
 
 

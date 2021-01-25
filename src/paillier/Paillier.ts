@@ -54,8 +54,8 @@ export class Paillier {
         }
 
 
-        console.log("gcd", r.gcd(publicKey.getN()).toString())
-        console.log("is equal one", r.gcd(publicKey.getN()))
+        // console.log("gcd", r.gcd(publicKey.getN()).toString())
+        // console.log("is equal one", r.gcd(publicKey.getN()))
         if (r.isNeg() || r.gte(publicKey.getN()) || !r.gcd(publicKey.getN()).eq(this.ONE)) {
 
             throw new Error(CryptoException.INVALID_RANDOMNESS);
@@ -70,7 +70,7 @@ export class Paillier {
 
         let red = BN.red(N2);
         let rRed = r.toRed(red);
-        console.log(rRed.redPow(N))
+        // console.log(rRed.redPow(N))
 
         c = c.mul(rRed.redPow(N)).mod(N2);
         // console.log("-------end----")
