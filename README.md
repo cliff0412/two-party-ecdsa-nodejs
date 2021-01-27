@@ -6,3 +6,5 @@
 
 * verifyPaillierPublicKeyProof test failed
 * verifyPaillierAndDlogProof to be added
+
+node: 15.6.0

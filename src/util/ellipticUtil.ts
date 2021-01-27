@@ -43,8 +43,8 @@ export const privateKeyToAccountAddress = (privateKey: string) => {
 export const formSigVval = (recovery: number, chainId: number) => {
     let v = recovery + 27
 
-    // if _implementsEIP155
-    v += chainId * 2 + 8;
+    // only if _implementsEIP155 and network is kovan
+    if (chainId !== 1) v += chainId * 2 + 8;
     return v;
 
 }
