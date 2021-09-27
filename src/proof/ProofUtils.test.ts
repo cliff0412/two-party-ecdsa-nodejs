@@ -72,8 +72,8 @@ test('verifyPaillierPublicKeyProof', async () => {
         paillierPrivateKey.getQ()
     );
 
-    console.log('---paillierPublicKeyProof---', paillierPublicKeyProof.getN().toString())
+    // console.log('---paillierPublicKeyProof---', paillierPublicKeyProof.getN().toString())
 
     let res = ProofUtils.verifyPaillierPublicKeyProof(paillierPublicKeyProof)
-    console.log('---res---', res)
+    // console.log('---res---', res)
 })

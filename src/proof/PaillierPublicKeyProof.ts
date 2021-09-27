@@ -1,22 +1,22 @@
 import BN from 'bn.js';
 
 export class PaillierPublicKeyProof {
-    public static NUMBER_OF_INSTANCES: number = 11;
+  public static NUMBER_OF_INSTANCES = 11;
 
-    private N: BN;
+  private N: BN;
 
-    private sigma: BN[];
+  private sigma: BN[];
 
-    public constructor(N: BN, sigma: BN[]) {
-        this.N = N;
-        this.sigma = sigma;
-    }
+  public constructor(N: BN, sigma: BN[]) {
+    this.N = N;
+    this.sigma = sigma;
+  }
 
-    public getN(): BN {
-        return this.N;
-    }
+  public getN(): BN {
+    return this.N;
+  }
 
-    public getSigma() {
-        return this.sigma;
-    }
+  public getSigma() {
+    return this.sigma;
+  }
 }

@@ -6,17 +6,29 @@
 		"moduleResolution": "node",
 		"outDir": "dist",
 		"target": "es2020",
-		"sourceMap": false,
-		"lib": ["es2020","es2017", "es2015", "es6"],
+		"lib": [
+			"es2020",
+			"es2017",
+			"es2015",
+			"es6"
+		],
 		"noImplicitAny": true,
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"allowSyntheticDefaultImports": true,
 		"allowJs": true,
-		"declarationMap": false
+		"declarationMap": false,
+		"declaration": true,
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"sourceMap": true,
+		"baseUrl": "./",
+		"incremental": true,
+		"skipLibCheck": true
 	},
 	"exclude": [
 		"**/*.test.*",

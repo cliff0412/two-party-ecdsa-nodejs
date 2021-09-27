@@ -1,31 +1,30 @@
 import BN from 'bn.js';
-import { CryptoException } from "../exception/CryptoException";
+import { CryptoException } from '../exception/CryptoException';
 
 export class PaillierPublicKey {
-    private n: BN;
-    private nSquare: BN;
+  private n: BN;
+  private nSquare: BN;
 
-    public constructor(n: BN) {
-        if (n == null) {
-            throw new Error(CryptoException.NULL_INPUT);
-        }
-        if (n.bitLength() < 2048) {
-            throw new Error(CryptoException.BIT_LENGTH_TOO_SMALL);
-        }
-        if (n.isNeg()) {
-            throw new Error(CryptoException.PARAMETER_TOO_SMALL);
-        }
-
-        this.n = n;
-        this.nSquare = n.mul(n);
+  public constructor(n: BN) {
+    if (n == null) {
+      throw new Error(CryptoException.NULL_INPUT);
+    }
+    if (n.bitLength() < 2048) {
+      throw new Error(CryptoException.BIT_LENGTH_TOO_SMALL);
+    }
+    if (n.isNeg()) {
+      throw new Error(CryptoException.PARAMETER_TOO_SMALL);
     }
 
-    public getN(): BN {
-        return this.n;
-    }
+    this.n = n;
+    this.nSquare = n.mul(n);
+  }
 
-    public getnSquare(): BN {
-        return this.nSquare;
-    }
+  public getN(): BN {
+    return this.n;
+  }
 
+  public getnSquare(): BN {
+    return this.nSquare;
+  }
 }

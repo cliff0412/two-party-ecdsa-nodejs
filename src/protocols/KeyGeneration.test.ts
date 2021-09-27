@@ -11,7 +11,7 @@ let keyGenerationP1: KeyGeneration = new KeyGeneration(CryptoConsants.PARTY_ONE)
 
 test('generateEcdsaPrivateKeyShare', () => {
     let res = keyGenerationP1.generateEcdsaPrivateKeyShare();
-    console.log(res.toString())
+    // console.log(res.toString())
 })
 
 
