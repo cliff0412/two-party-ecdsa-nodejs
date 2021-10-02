@@ -9,7 +9,9 @@ export class HashCommitter {
     // the random opening value is of length 3*k
     // byte[] r = new byte[BYTE_LENGTH / 2 * 3];
     // random.nextBytes(r);
-    return crypto.randomBytes(48);
+    const randomBuf = crypto.randomBytes(48);
+    // console.log('randomBuf length', randomBuf.length)
+    return randomBuf;
   }
 
   public static commit(r: Buffer, ...messageInHexStr: string[]): Commitment {
@@ -21,8 +23,11 @@ export class HashCommitter {
 
     // MessageDigest md = MessageDigest.getInstance("SHA-256");
     for (const msg of messageInHexStr) {
-      if (msg == null) {
-        throw new Error(CryptoException.NULL_INPUT);
+      // console.log(msg, msg.length)
+      if (msg == null 
+        // || msg.length != 64
+        ) {
+        throw new Error(CryptoException.INVALID_INPUT);
       }
       md.update(msg, 'hex');
     }

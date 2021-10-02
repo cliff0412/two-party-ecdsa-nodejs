@@ -4,7 +4,7 @@ import * as util from './util';
 const cryptoUtil = require('./bigint-crypto-utils');
 
 export const randomPrime = async (bitLength: number): Promise<BN> => {
-  console.log('using bigLength in randomPrime: ', bitLength);
+  // console.log('using bigLength in randomPrime: ', bitLength);
   return new Promise((resolve, reject) => {
     // console.log("cryptoUtil: ", cryptoUtil)
     cryptoUtil

@@ -38,6 +38,6 @@ test('privateKeyToAccount', () => {
     expect(addr).toBe("0x00D8d0660b243452fC2f996A892D3083A903576F")
 
 
-    let addr2 = ellipticUtil.privateKeyToAccountAddress("e2b253cee5a710074c1a93588deed9c51d470ac894a78e793502d392c689c7b7")
-    console.log("address is: ", addr2)
+    // let addr2 = ellipticUtil.privateKeyToAccountAddress("e2b253cee5a710074c1a93588deed9c51d470ac894a78e793502d392c689c7b7")
+    // console.log("address is: ", addr2)
 })

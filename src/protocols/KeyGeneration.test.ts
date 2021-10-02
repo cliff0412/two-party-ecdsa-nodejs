@@ -1,18 +1,13 @@
-import {KeyGeneration} from './KeyGeneration';
+// import {KeyGeneration} from './KeyGeneration';
 import { ECPoint } from '../type/ECPoint';
 import * as elliptic from 'elliptic';
 // import BN from 'bn.js';
 import * as serialization from '../util/serialization'
 import * as desearilization from '../util/desearilization'
-import {CryptoConsants} from '../common/CryptoConstants';
+// import {CryptoConsants} from '../common/CryptoConstants';
 // import { ECPoint } from '../type/ECPoint';
 
-let keyGenerationP1: KeyGeneration = new KeyGeneration(CryptoConsants.PARTY_ONE);
-
-test('generateEcdsaPrivateKeyShare', () => {
-    let res = keyGenerationP1.generateEcdsaPrivateKeyShare();
-    // console.log(res.toString())
-})
+// let keyGenerationP1: KeyGeneration = new KeyGeneration(CryptoConsants.PARTY_ONE);
 
 
 test('computeEcdsaPublicKeyShare', () => {
@@ -23,10 +18,10 @@ test('computeEcdsaPublicKeyShare', () => {
     // console.log("--generator x ", g.getX().toString('hex'))
     // console.log("--generator y ", g.getY().toString('hex'))
 
-   let pointInJson = serialization.ecPointToJSON(g)
-   console.log(pointInJson)
-   let p: ECPoint= desearilization.ecPointFromJSON(pointInJson)
-    console.log(p.eq(g))
+    let pointInJson = serialization.ecPointToJSON(g)
+    // console.log(pointInJson)
+    let p: ECPoint = desearilization.ecPointFromJSON(pointInJson)
+    // console.log(p.eq(g))
     // let encodedStr = g.encodeCompressed("hex");
     // console.log('---encoded str---: ', encodedStr)
 

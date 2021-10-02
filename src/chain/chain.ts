@@ -6,7 +6,7 @@ import { SigningContextP1, SigningContextP2 } from '../protocols';
 
 import { Signature, SignatureOnChain } from '../type';
 import { ellipticUtil } from '../util';
-import { sign } from '../../test/two-party-ecdsa.test';
+import { sign } from '../../test/fixture/two-party-ecdsa';
 import { CryptoConsants } from '../common/CryptoConstants';
 
 const providerUrl =
@@ -40,7 +40,7 @@ export const sendTx = (
     web3.eth
       .getTransactionCount(from)
       .then((nonce) => {
-        console.log('----nounce: ', nonce);
+        // console.log('----nounce: ', nonce);
 
         const rawTx = {
           nonce: '0x' + nonce.toString(16),
@@ -51,7 +51,7 @@ export const sendTx = (
         };
 
         // ropsten， default: 'mainnet'
-        console.log('---start construct tx');
+        // console.log('---start construct tx');
         const tx = new Transaction(rawTx, { chain: 'kovan' });
 
         const hash = tx.hash(false);
@@ -90,7 +90,7 @@ export const sendTx = (
         tx.s = sigOnChain.s.toBuffer();
         tx.v = new BN(sigOnChain.v, 10).toBuffer();
 
-        console.log('---tx.raw---: ', tx.raw);
+        // console.log('---tx.raw---: ', tx.raw);
 
         const serializedTx = tx.serialize();
 
@@ -99,16 +99,16 @@ export const sendTx = (
         web3.eth
           .sendSignedTransaction('0x' + serializedTx.toString('hex'))
           .on('receipt', (receipt) => {
-            console.log(receipt);
+            // console.log(receipt);
             resolve(receipt);
           })
           .on('error', (err) => {
-            console.log('---- err in sendSignedTransaction ', err);
+            // console.log('---- err in sendSignedTransaction ', err);
             reject(err);
           });
       })
       .catch((err) => {
-        console.log('error in get nounce: ', err);
+        // console.log('error in get nounce: ', err);
         reject(err);
       });
   });

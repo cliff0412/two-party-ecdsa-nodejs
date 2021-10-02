@@ -5,7 +5,7 @@ const cryptoUtil = require('./bigint-crypto-utils');
 import { ECPoint, KeyGenContext } from '../type';
 import { CryptoConsants } from '../common/CryptoConstants';
 import * as ellipticUtil from './ellipticUtil';
-import { KeyGenContextVO } from 'dist/src';
+import { KeyGenContextVO } from '../';
 
 export const bigIntToBN = (input: bigint) => {
   return new BN(input + '');

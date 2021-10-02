@@ -8,6 +8,7 @@ export class CryptoException {
    * general
    */
   public static NULL_INPUT = 'the input is null';
+  public static INVALID_INPUT = 'the input is invalid';
   public static PARAMETER_OUT_OF_RANGE = 'parameter out of range';
   public static PARAMETER_TOO_SMALL = 'parameter too small';
   public static PARAMETER_TOO_LARGE = 'parameter too large';
