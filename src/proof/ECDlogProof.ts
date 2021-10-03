@@ -1,5 +1,8 @@
 import BN from 'bn.js';
-import { ECPoint } from '../type/ECPoint';
+import { ECPoint, ECPointVO } from '../type/ECPoint';
+import { ecPointToJSON, bnToHexString } from '../util/serialization';
+import { ecPointFromJSON, bnFromHexString } from '../util/desearilization';
+
 /**
  * to proof x is a discrete log of Q
  */
@@ -34,4 +37,26 @@ export class ECDlogProof {
   public getZ(): BN {
     return this.z;
   }
+
+  public toJson(): ECDlogProofVO {
+    return {
+      q: ecPointToJSON(this.getQ()),
+      x: ecPointToJSON(this.getX()),
+      z: bnToHexString(this.getZ())
+    }
+  }
+
+  public static fromJson(vo: ECDlogProofVO): ECDlogProof {
+    return new ECDlogProof(
+      ecPointFromJSON(vo.q),
+      ecPointFromJSON(vo.x),
+      bnFromHexString(vo.z)
+    )
+  }
+}
+
+export type ECDlogProofVO = {
+  q: ECPointVO;
+  x: ECPointVO;
+  z: string;
 }

@@ -25,6 +25,11 @@ export interface ECPoint {
   neg(): ECPoint;
 }
 
+export type ECPointVO = {
+  x: string;
+  y: string;
+}
+
 export interface Signature {
   r: BN;
   s: BN;
