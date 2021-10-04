@@ -9,6 +9,7 @@ import { PaillierPublicKeyProof } from './PaillierPublicKeyProof';
 import * as elliptic from 'elliptic';
 import * as random from '../util/random';
 import crypto from 'crypto';
+import { bnToHexString } from '../util/serialization';
 
 export class ProofUtils {
   public static ec = new elliptic.ec('secp256k1');
@@ -196,17 +197,15 @@ export class ProofUtils {
    */
   public static computeChallenge(m: BN, ...points: ECPoint[]): BN {
     const md = crypto.createHash('sha256');
-    // MessageDigest md = MessageDigest.getInstance("SHA-256");
     for (const point of points) {
       if (point == null) {
         throw new Error(CryptoException.NULL_INPUT);
       }
-      // TODO: encodeCompressed to be tested
-      md.update(point.encodeCompressed('hex'), 'hex');
+      md.update(Buffer.from(point.encodeCompressed('hex'), 'hex'));
     }
     const hash: Buffer = md.digest();
     // console.log("-hased output-: ", hash)
-    return this.hashToInt(hash.toString('hex'), m);
+    return this.hashToInt(hash.toString("hex"), m);
   }
 
   /**

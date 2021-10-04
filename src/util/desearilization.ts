@@ -14,5 +14,5 @@ export const ecPointFromJSON = (coordsInHexString: ECPointVO): ECPoint => {
 };
 
 export const bnFromHexString = (input: string): BN => {
-  return new BN(Buffer.from(input, 'hex'))
+  return new BN(input, 'hex')
 }
