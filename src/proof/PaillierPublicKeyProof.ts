@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import { bnToHexString } from '../util/serialization';
 
 export class PaillierPublicKeyProof {
   public static NUMBER_OF_INSTANCES = 11;
@@ -19,4 +20,17 @@ export class PaillierPublicKeyProof {
   public getSigma() {
     return this.sigma;
   }
+
+  public toJson(): PaillierPublicKeyProofVO {
+    return {
+      n: bnToHexString(this.N),
+      sigma: this.sigma.map(s => bnToHexString(s))
+    }
+  }
+}
+
+
+export type PaillierPublicKeyProofVO = {
+  n: string;
+  sigma: string[];
 }

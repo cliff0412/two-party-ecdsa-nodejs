@@ -1129,6 +1129,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.1.tgz#f3647623199ca920960006b3dccf633ea905f243"
   integrity sha512-4/Z9DMPKFexZj/Gn3LylFgamNKHm4K3QDi0gz9B26Uk0c8izYf97B5fxfpspMNkWlFupblKM/nV8+NA9Ffvr+w==
 
+"@types/node@>=10":
+  version "16.10.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.3.tgz#7a8f2838603ea314d1d22bb3171d899e15c57bd5"
+  integrity sha512-ho3Ruq+fFnBrZhUYI46n/bV2GjwzSkwuT4dTf0GkuNFmnb8nq4ny2z9JEVemFi6bdEJanHLlYfy9c6FN9B9McQ==
+
 "@types/node@^12.12.6":
   version "12.20.27"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.27.tgz#4141fcad57c332a120591de883e26fe4bb14aaea"
@@ -2187,6 +2192,18 @@ bech32@1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/bech32/-/bech32-1.1.4.tgz#e38c9f37bf179b8eb16ae3a772b40c356d4832e9"
   integrity sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==
+
+bigint-conversion@^2.1.12:
+  version "2.1.12"
+  resolved "https://registry.yarnpkg.com/bigint-conversion/-/bigint-conversion-2.1.12.tgz#2cac6e67f3d1c4bda8dd83f53a54491d5009262d"
+  integrity sha512-3VaW54fAag+ODLwBYNV4eAvTtHZQPpGyNnGkzRhDvg5VHNCMYskGKKEIuq5RQ4CvZWEzTLJs1C3Zlw3rsal/RA==
+  dependencies:
+    "@types/node" ">=10"
+
+bigint-mod-arith@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/bigint-mod-arith/-/bigint-mod-arith-3.0.1.tgz#9d78e6840eef7b00e4e4ac46c7c860ba4a230c56"
+  integrity sha512-sEgnLaPHMNvY1Ylb/IxWXA+6anlg283FYSnKWi/odba2mvHSwt2sqSJihrE+mFUkiRrFb0Nxw+XdIwByOi42/w==
 
 bignumber.js@^9.0.0:
   version "9.0.1"

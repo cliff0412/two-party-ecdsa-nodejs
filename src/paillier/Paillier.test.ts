@@ -40,8 +40,6 @@ test('decrypt', async () => {
     let m = new BN("1234567890", 10);
     let r = new BN("13", 10);
 
-
-
     let c: BN = Paillier.encryptWithRandom(keyPair.getPublicKey(), m, r);
 
     let res = Paillier.decrypt(keyPair.getPrivateKey(), c);

@@ -5,7 +5,7 @@ import { ECPoint } from '../type';
 import { CryptoException } from '../exception/CryptoException';
 import { CryptoConsants } from '../common/CryptoConstants';
 import { PaillierPublicKeyProof } from './PaillierPublicKeyProof';
-
+import {modInverse} from '../util/bnUtil';
 import * as elliptic from 'elliptic';
 import * as random from '../util/random';
 import crypto from 'crypto';
@@ -47,8 +47,10 @@ export class ProofUtils {
     const phi: BN = p.sub(CryptoConsants.ONE).mul(q.sub(CryptoConsants.ONE));
     let NInv: BN;
     try {
-      const nInRed = N.toRed(BN.red(phi));
-      NInv = nInRed.redInvm();
+      NInv =modInverse(N, phi);
+      
+      // N.toRed(BN.red(phi));
+      // NInv = nInRed.redInvm();
     } catch (e) {
       throw new Error(CryptoException.INCONSISTENT_INPUTS + JSON.stringify(e));
     }
@@ -61,10 +63,12 @@ export class ProofUtils {
     // ATTENTION
     const NInvFromRed = (NInv as any).fromRed();
     for (let i = 0; i < PaillierPublicKeyProof.NUMBER_OF_INSTANCES; i++) {
+      console.log(`iterate ${i}, \n N: ${bnToHexString(N)} \n temp: ${bnToHexString(temp)}`)
       temp = this.generateBigInteger(N, temp);
 
       const tempInRed = temp.toRed(BN.red(N));
       try {
+        const sig = tempInRed.redPow(NInvFromRed);
         sigma[i] = tempInRed.redPow(NInvFromRed);
       } catch (err) {
         console.error('----------error-------', err);
@@ -238,18 +242,22 @@ export class ProofUtils {
    * @param in the integer
    * @return a challenge value modulo m
    */
-  private static generateBigInteger(m: BN, in_val: BN): BN {
+  public static generateBigInteger(m: BN, in_val: BN): BN {
     if (m == null || in_val == null) {
       throw new Error(CryptoException.NULL_INPUT);
     }
 
     let md = crypto.createHash('sha256');
 
-    let num = (m.bitLength() + 7) / 8;
+    let num = Math.floor((m.bitLength() + 7) / 8);
     const out = new ArrayBuffer(num);
-    const out_view = new Uint8Array(out);
+    const out_view = new Int8Array(out);
 
-    let temp = in_val.toBuffer();
+    // default is positive number, corresponding to Java BigInteger, sign byte
+    const rawBuf = in_val.toBuffer();
+    const firstByte = rawBuf.readUInt8(0);
+    const sign = firstByte & 0x8; // 1000
+    let temp = sign > 0? Buffer.concat([Buffer.from([0]),rawBuf]):rawBuf;
     let count = 0;
     while (num >= 32) {
       // 32 is the digest length in bytes
@@ -270,11 +278,12 @@ export class ProofUtils {
       md.update(temp);
       temp = md.digest();
       // System.arraycopy(temp, 0, out, count, num);
-      for (let i = 0; i < 32; i++) {
+      for (let i = 0; i < num; i++) {
         out_view[count + i] = temp[i];
       }
     }
 
+    // console.log("out_view", Buffer.from(out_view).toString('hex'))
     return this.hashToInt(Buffer.from(out_view).toString('hex'), m);
   }
 }
