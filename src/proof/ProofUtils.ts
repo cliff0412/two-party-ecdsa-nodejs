@@ -5,11 +5,10 @@ import { ECPoint } from '../type';
 import { CryptoException } from '../exception/CryptoException';
 import { CryptoConsants } from '../common/CryptoConstants';
 import { PaillierPublicKeyProof } from './PaillierPublicKeyProof';
-import {modInverse} from '../util/bnUtil';
+import { modInverse, modPow } from '../util/bnUtil';
 import * as elliptic from 'elliptic';
 import * as random from '../util/random';
 import crypto from 'crypto';
-import { bnToHexString } from '../util/serialization';
 
 export class ProofUtils {
   public static ec = new elliptic.ec('secp256k1');
@@ -47,8 +46,8 @@ export class ProofUtils {
     const phi: BN = p.sub(CryptoConsants.ONE).mul(q.sub(CryptoConsants.ONE));
     let NInv: BN;
     try {
-      NInv =modInverse(N, phi);
-      
+      NInv = modInverse(N, phi);
+
       // N.toRed(BN.red(phi));
       // NInv = nInRed.redInvm();
     } catch (e) {
@@ -61,15 +60,16 @@ export class ProofUtils {
     let temp: BN = N;
 
     // ATTENTION
-    const NInvFromRed = (NInv as any).fromRed();
+    // const NInvFromRed = (NInv as any).fromRed();
     for (let i = 0; i < PaillierPublicKeyProof.NUMBER_OF_INSTANCES; i++) {
-      console.log(`iterate ${i}, \n N: ${bnToHexString(N)} \n temp: ${bnToHexString(temp)}`)
+      // console.log(`iterate ${i}, \n N: ${bnToHexString(N)} \n temp: ${bnToHexString(temp)}`)
       temp = this.generateBigInteger(N, temp);
 
-      const tempInRed = temp.toRed(BN.red(N));
+      // const tempInRed = temp.toRed(BN.red(N));
       try {
-        const sig = tempInRed.redPow(NInvFromRed);
-        sigma[i] = tempInRed.redPow(NInvFromRed);
+        // const sig = tempInRed.redPow(NInvFromRed);
+        const sig = modPow(temp, NInv, N)
+        sigma[i] = modPow(temp, NInv, N);
       } catch (err) {
         console.error('----------error-------', err);
         throw new Error(CryptoException.RED_POW_ERROR);
@@ -122,9 +122,7 @@ export class ProofUtils {
       }
       temp = ProofUtils.generateBigInteger(N, temp);
 
-      s = (s as any).fromRed();
-      const sInRed = s.toRed(BN.red(N));
-      const sPowN = sInRed.redPow(N);
+      const sPowN = modPow(s, N, N);// s.pow(N);
 
       if (!sPowN.eq(temp)) {
         return false;
@@ -255,9 +253,11 @@ export class ProofUtils {
 
     // default is positive number, corresponding to Java BigInteger, sign byte
     const rawBuf = in_val.toBuffer();
+    // const twos = in_val.toTwos(257);
     const firstByte = rawBuf.readUInt8(0);
-    const sign = firstByte & 0x8; // 1000
-    let temp = sign > 0? Buffer.concat([Buffer.from([0]),rawBuf]):rawBuf;
+    const sign = firstByte & 0x80; // 1000 0000
+    let temp = sign > 0 ? Buffer.concat([Buffer.from([0]), rawBuf]) : rawBuf;
+    // let temp = Buffer.concat([Buffer.from([0]),rawBuf]);
     let count = 0;
     while (num >= 32) {
       // 32 is the digest length in bytes
