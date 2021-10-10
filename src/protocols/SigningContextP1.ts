@@ -1,9 +1,9 @@
 import BN from 'bn.js';
-import { PaillierPrivateKey } from '../paillier';
-
+import { bnToHexString, ecPointToJSON } from '../util/serialization';
+import { bnFromHexString, ecPointFromJSON } from '../util/desearilization';
+import { PaillierPrivateKey, PaillierPrivateKeyVO } from '../paillier';
 import { ECDlogProof } from '../proof';
-
-import { ECPoint } from '../type';
+import { ECPoint, ECPointVO } from '../type';
 
 export class SigningContextP1 {
   /**
@@ -88,4 +88,43 @@ export class SigningContextP1 {
   public setP2EcdsaPublicRandomShare(p2EcdsaPublicRandomShare: ECPoint) {
     this.p2EcdsaPublicRandomShare = p2EcdsaPublicRandomShare;
   }
+
+  public equals(obj: SigningContextP1): boolean {
+    if (obj == undefined || obj.getPaillierPrivateKey() == undefined) return false;
+
+    return this.getPaillierPrivateKey().equals(obj.getPaillierPrivateKey()) &&
+      this.getEcdsaPrivateKeyShare().eq(obj.getEcdsaPrivateKeyShare()) &&
+      this.getEcdsaPublicKey().eq(obj.getEcdsaPublicKey())
+  }
+
+  public toJson(): SigningContextP1VO {
+    return {
+      paillierPrivateKey: this.getPaillierPrivateKey().toJson(),
+      ecdsaPrivateKeyShare: bnToHexString(this.getEcdsaPrivateKeyShare()),
+      ecdsaPublicKey: ecPointToJSON(this.getEcdsaPublicKey())
+    }
+  }
+
+  public static fromJson(vo: SigningContextP1VO) {
+    return new SigningContextP1(
+      PaillierPrivateKey.fromJson(vo.paillierPrivateKey),
+      bnFromHexString(vo.ecdsaPrivateKeyShare),
+      ecPointFromJSON(vo.ecdsaPublicKey)
+    )
+  }
+}
+
+export type SigningContextP1VO = {
+  /**
+  * Paillier private key
+  */
+  paillierPrivateKey: PaillierPrivateKeyVO;
+  /**
+   * ECDSA private key share, x1
+   */
+  ecdsaPrivateKeyShare: string;
+  /**
+   * ECDSA public key, Q
+   */
+  ecdsaPublicKey: ECPointVO;
 }

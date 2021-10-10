@@ -73,6 +73,8 @@ describe("proofUtils", () => {
         }
         const proof = ECDlogProof.fromJson(ecdLogProofVo)
         expect(ProofUtils.verifyECDlogProof(proof)).toBeTruthy();
+
+        
     })
 
     it('generateBigInteger', async () => {

@@ -1,6 +1,7 @@
 import BN from 'bn.js';
 import { CryptoException } from '../exception/CryptoException';
-
+import { bnToHexString } from '../util/serialization';
+import { bnFromHexString } from '../util/desearilization';
 export class PaillierPublicKey {
   private n: BN;
   private nSquare: BN;
@@ -27,4 +28,20 @@ export class PaillierPublicKey {
   public getnSquare(): BN {
     return this.nSquare;
   }
+
+  public toJson(): PaillierPublicKeyVO {
+    return {
+      n: bnToHexString(this.getN())
+    }
+  }
+
+  public static fromJson(vo: PaillierPublicKeyVO): PaillierPublicKey {
+    return new PaillierPublicKey(
+      bnFromHexString(vo.n)
+    )
+  }
+}
+
+export type PaillierPublicKeyVO = {
+  n: string;
 }

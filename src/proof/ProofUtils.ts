@@ -132,6 +132,22 @@ export class ProofUtils {
     return true;
   }
 
+  // TODO: to be implemented, and corresponding verify
+  /**
+     * Generates proof that Q=[x]G and cKey = Enc(x) and x in [0,n-1]
+     * where n is the order of G.
+     * @param G the elliptic curve base point
+     * @param Q the public point, Q=[x]G
+     * @param x the private integer
+     * @param N the Paillier modulus
+     * @param cKey the Paillier ciphertext which encrypts x with randomness rKey
+     * @param rKey the randomness used to encrypt x
+     * @return a zk-proof that Q=[x]G and cKey=Enc(x;rKey) and x lies in [0,n-1]
+     */
+  public static generatePaillierAndDlogProof() {
+
+  }
+
   /**
    * Generates a elliptic curve discrete logarithm proof.
    * @param G the base point of the curve

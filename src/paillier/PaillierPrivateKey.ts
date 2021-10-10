@@ -1,5 +1,6 @@
 import BN from 'bn.js';
-
+import { bnFromHexString } from '../util/desearilization';
+import { bnToHexString } from '../util/serialization';
 import { CryptoException } from '../exception/CryptoException';
 import * as util from '../util/util';
 
@@ -95,4 +96,46 @@ export class PaillierPrivateKey {
   public getqSquareInv() {
     return this.qSquareInv;
   }
+
+  public equals(obj: PaillierPrivateKey): boolean {
+    if (!obj) return false;
+    return (this.getP().eq(obj.getP()) &&
+      this.getQ().eq(obj.getQ())
+    )
+  }
+
+  public toJson(): PaillierPrivateKeyVO {
+    return {
+      p: bnToHexString(this.getP()),
+      q: bnToHexString(this.getQ()),
+      n: bnToHexString(this.getN()),
+      pSquare: bnToHexString(this.getpSquare()),
+      qSquare: bnToHexString(this.getqSquare()),
+      nSquare: bnToHexString(this.getnSquare()),
+      lambda: bnToHexString(this.getLambda()),
+      lambdaInv: bnToHexString(this.getLambdaInv()),
+      pSquareInv: bnToHexString(this.getpSquareInv()),
+      qSquareInv: bnToHexString(this.getqSquareInv()),
+    }
+  }
+
+  public static fromJson(vo: PaillierPrivateKeyVO): PaillierPrivateKey {
+    return new PaillierPrivateKey(
+      bnFromHexString(vo.p),
+      bnFromHexString(vo.q)
+    )
+  }
+}
+
+export type PaillierPrivateKeyVO = {
+  p: string;
+  q: string;
+  n: string;
+  pSquare: string;
+  qSquare: string;
+  nSquare: string;
+  lambda: string;
+  lambdaInv: string;
+  pSquareInv: string;
+  qSquareInv: string;
 }
